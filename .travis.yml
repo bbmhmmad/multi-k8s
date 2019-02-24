@@ -1,0 +1,23 @@
+sudo: required
+services:
+  - docker
+
+before_install: #use Dockerfile.dev to run tests. production Dockerfile doesnt give access to tests just raw html/js files
+  - docker build -t bbmhmmad/react-test -f ./client/Dockerfile.dev ./client #client folder is build context
+
+script: #primary test running section. exit code other than 0 is fail to travis-ci
+  - docker run bbmhmmad/react-test npm test -- --coverage #override default start command. coverage hack to exit tests
+
+after_success: # Production Docker builds for all apps
+  - docker build -t stephengrider/multi-client ./client #uses default of Dockerfile dont have to specify file
+  - docker build -t stephengrider/multi-nginx ./nginx
+  - docker build -t stephengrider/multi-server ./server
+  - docker build -t stephengrider/multi-worker ./worker
+  #Log in to Docker CLI. echo retrieves password from env variable and emits via stdin to command after pipe
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  #take images and push to Docker Hub
+  - docker push stephengrider/multi-client
+  - docker push stephengrider/multi-nginx
+  - docker push stephengrider/multi-server
+  - docker push stephengrider/multi-worker
+
