@@ -9,15 +9,15 @@ script: #primary test running section. exit code other than 0 is fail to travis-
   - docker run bbmhmmad/react-test npm test -- --coverage #override default start command. coverage hack to exit tests
 
 after_success: # Production Docker builds for all apps
-  - docker build -t stephengrider/multi-client ./client #uses default of Dockerfile dont have to specify file
-  - docker build -t stephengrider/multi-nginx ./nginx
-  - docker build -t stephengrider/multi-server ./server
-  - docker build -t stephengrider/multi-worker ./worker
+  - docker build -t bbmhmmad/multi-client ./client #uses default of Dockerfile dont have to specify file
+  - docker build -t bbmhmmad/multi-nginx ./nginx
+  - docker build -t bbmhmmad/multi-server ./server
+  - docker build -t bbmhmmad/multi-worker ./worker
   #Log in to Docker CLI. echo retrieves password from env variable and emits via stdin to command after pipe
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   #take images and push to Docker Hub
-  - docker push stephengrider/multi-client
-  - docker push stephengrider/multi-nginx
-  - docker push stephengrider/multi-server
-  - docker push stephengrider/multi-worker
+  - docker push bbmhmmad/multi-client
+  - docker push bbmhmmad/multi-nginx
+  - docker push bbmhmmad/multi-server
+  - docker push bbmhmmad/multi-worker
 
