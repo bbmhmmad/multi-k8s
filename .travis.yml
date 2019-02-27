@@ -21,3 +21,15 @@ after_success: # Production Docker builds for all apps
   - docker push bbmhmmad/multi-server
   - docker push bbmhmmad/multi-worker
 
+deploy:
+  provider: elasticbeanstalk
+  region: us-east-2
+  app: multi-docker
+  env: MultiDocker-env
+  bucket_name: elasticbeanstalk-us-east-2-812624990241 # s3 region bucket
+  bucket_path: docker-multi #name of bucket that will get created with app files
+  on:
+    branch: master # only deploy on changes to master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key:
+    secure: $AWS_SECRET_KEY
