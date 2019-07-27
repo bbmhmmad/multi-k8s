@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: client-cluster-ip-service
+spec:
+  type: ClusterIP
+  # selector used to match correct Deployment Pods
+  selector: 
+    component: web
+  ports:
+    - port: 3000 #ports dont have to be same
+      targetPort: 3000
